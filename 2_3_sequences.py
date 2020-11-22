@@ -149,9 +149,45 @@ def fib_tree(n):
         return tree(fib_n, [left, right])
 
 
-fib_tree(3)
+branches(fib_tree(3))
 
 
+def count_leaves(tree):
+    if is_leaf(tree):
+        return 1
+    else:
+        branch_counts = [count_leaves(b) for b in branches(tree)]
+        return sum(branch_counts)
 
+count_leaves(fib_tree(8))
+
+## árvore de partição
+
+def partition_tree(n, m):
+    if n == 0:
+        return tree(True)
+    elif n < 0 or m == 0:
+        return tree(True)
+    else:
+        left = partition_tree(n - m, m)
+        right = partition_tree(n, m - 1)
+        return tree(m, [left, right])
+
+
+def print_parts(tree, partition = []):
+    if is_leaf(tree):
+        if label(tree):
+            print(' + '.join(partition))
+    else:
+        left, right = branches(tree)
+        m = str(label(tree))
+        print_parts(left, partition + [m])
+        print_parts(right, partition)
+
+
+print_parts(partition_tree(12, 2))
+
+partition_tree(6, 2)
+count_leaves(partition_tree(6, 2))
 
 
